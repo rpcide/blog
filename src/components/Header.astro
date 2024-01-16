@@ -3,12 +3,24 @@ import Logo from "./Logo.astro";
 ---
 
 <header>
-  <div class="w-full max-w-screen-xl mx-auto px-6 h-[65px] flex items-center justify-between">
+  <div
+    class="w-full max-w-screen-xl mx-auto px-6 h-[65px] flex items-center justify-between"
+  >
     <div class="flex items-center gap-2">
       <Logo />
       <h1 class="text-lg font-bold">Blog</h1>
     </div>
 
-    <nav></nav>
+    <nav>
+      <ul>
+        <li>
+          <a
+            target="_blank"
+            href="https://www.rpcide.cloud"
+            class="bg-primary-400 rounded px-4 py-2 hover:opacity-90">Registrarse</a
+          >
+        </li>
+      </ul>
+    </nav>
   </div>
 </header>
