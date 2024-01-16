@@ -9,6 +9,10 @@ export default {
         text: "#fff",
         textAlt: "rgb(107 114 128)",
       },
+      fontFamily: {
+        heading: "'Jost Variable', sans-serif",
+        body: "'Inter Tight Variable', sans-serif",
+      },
     },
   },
   plugins: [],
