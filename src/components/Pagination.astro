@@ -1,0 +1,18 @@
+---
+import Button from "./Button.astro";
+
+const hi = (e) => {
+  console.log(e);
+};
+---
+
+<div class="flex justify-center my-16">
+  <Button colorScheme="white" id="btn-click">Cargar más</Button>
+</div>
+
+<script>
+  document.getElementById("btn-click").addEventListener("click", (e) => {
+    console.log(e);
+    console.log("Load more....");
+  });
+</script>

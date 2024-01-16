@@ -24,6 +24,9 @@ export default {
         heading: "'Jost Variable', sans-serif",
         body: "'Inter Tight Variable', sans-serif",
       },
+      gridTemplateColumns: {
+        responsive: "repeat(auto-fill, minmax(15rem, 1fr))",
+      },
     },
   },
   plugins: [],

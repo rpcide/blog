@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  banner: string;
+}
+
+const { title, banner } = Astro.props;
+---
+
+<article
+  class="rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-base"
+>
+  <div class="relative block pt-[56.25%]">
+    <img src={banner} alt={title} class="absolute top-0 left-0 w-full h-full" />
+  </div>
+
+  <div class="p-4">
+    <h2 class="text-xl font-bold mb-4">{title}</h2>
+
+    <footer>
+      <div class="flex gap-2 items-center">
+        <img
+          alt="Creador del articulo"
+          src="https://avatars.githubusercontent.com/u/120739623?v=4"
+          class="rounded-full w-8"
+        />
+        <h5>Andres Parra</h5>
+      </div>
+    </footer>
+  </div>
+</article>

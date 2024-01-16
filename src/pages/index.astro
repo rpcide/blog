@@ -1,9 +1,25 @@
 ---
-import Newsletter from "../components/Newsletter.astro";
 import Layout from "../layouts/Layout.astro";
+import Newsletter from "../components/Newsletter.astro";
+
+import { getAllPosts } from "../lib/Posts";
+import ListRecentPosts from "../components/ListRecentPosts.astro";
+
+const { page, posts } = await getAllPosts({ page: 1 });
+
+console.log(page);
+
+if (!posts) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
 ---
 
 <Layout title="Blog">
+  <ListRecentPosts posts={posts} />
+
   <Newsletter />
 </Layout>
 
