@@ -20,3 +20,11 @@ export const getAllPosts = async ({ page } = { page: 1 }) => {
 
   return { page, posts };
 };
+
+export const getPostBySlug = async (slug) => {
+  return await (
+    await Posts()
+  ).findOne({
+    slug: slug,
+  });
+};

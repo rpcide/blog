@@ -1,0 +1,79 @@
+---
+import { marked } from "marked";
+import dayjs from "dayjs";
+import { getPostBySlug } from "../../lib/Posts";
+
+import Layout from "../../layouts/Layout.astro";
+
+dayjs.locale("es");
+
+const { slug } = Astro.params;
+const data = await getPostBySlug(slug);
+
+if (!data) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
+const content = marked.parse(data.content);
+---
+
+<Layout title={`${data.title} - RPCIDE Blog`}>
+  <section>
+    <p class="text-textAlt mb-4">
+      <time>{dayjs(data.createdAt).format("MMMM D, YYYY")}</time>
+    </p>
+
+    <h1 class="text-4xl font-bold mb-4">{data.title}</h1>
+
+    <div class="flex gap-2 items-center">
+      <img
+        alt="Creador del articulo"
+        src="https://avatars.githubusercontent.com/u/120739623?v=4"
+        class="rounded-full w-8 border-2 border-primary-400"
+      />
+      <h5>Andres Parra</h5>
+    </div>
+
+    <div class="mt-20 markdown">
+      <article set:html={content} />
+    </div>
+  </section>
+</Layout>
+
+<style is:inline>
+  .markdown h1 {
+    font-size: 1.875rem !important;
+  }
+  .markdown h2 {
+    font-size: 1.5rem !important;
+  }
+  .markdown h3 {
+    font-size: 1.25rem !important;
+  }
+  .markdown h4 {
+    font-size: 1.125rem !important;
+  }
+  .markdown h5 {
+    font-size: 1rem !important;
+  }
+
+  .markdown p {
+    margin: 1rem 0;
+  }
+
+  .markdown a {
+    color: var(--primary-color);
+    text-decoration: underline;
+  }
+
+  .markdown img,
+  .markdown video {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0.375rem;
+  }
+</style>

@@ -7,8 +7,6 @@ import ListRecentPosts from "../components/ListRecentPosts.astro";
 
 const { page, posts } = await getAllPosts({ page: 1 });
 
-console.log(page);
-
 if (!posts) {
   return new Response(null, {
     status: 404,
