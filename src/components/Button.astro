@@ -1,0 +1,27 @@
+---
+import { COLORS } from "../types/colors";
+
+interface Props {
+  id?: string;
+  className?: string;
+  title?: string;
+  colorScheme?:
+    | "default"
+    | "primary"
+    | "black"
+    | "white"
+    | "gray"
+    | "warning"
+    | "error";
+}
+
+const { id, title, colorScheme, className } = Astro.props;
+
+const baseStyles = `px-4 py-2 rounded ${COLORS[colorScheme || "default"].bg} ${
+  COLORS[colorScheme || "default"].text
+} hover:opacity-[0.8]`;
+---
+
+<button title={title} id={id} class=`${baseStyles} ${className}`>
+  <slot />
+</button>
