@@ -1,0 +1,27 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ListRecentPosts from "../../components/ListRecentPosts.astro";
+
+import { getPostsByTag } from "../../lib/Posts";
+
+const isTag = Astro.url.searchParams.get("tag");
+const isSearch = Astro.url.searchParams.get("s");
+
+const search = isTag || isSearch || "";
+const tags = isTag ? search : [];
+
+const { posts } = await getPostsByTag({ tags, search, page: 1 });
+console.log(posts);
+---
+
+<Layout title={`Resultados de ${search}`}>
+  <ListRecentPosts posts={posts} />
+
+  {
+    posts.length === 0 && (
+      <div>
+        <p>Por el momento no hay contenido que mostrar</p>
+      </div>
+    )
+  }
+</Layout>
