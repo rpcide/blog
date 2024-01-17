@@ -10,7 +10,7 @@ const { title, banner, slug } = Astro.props;
 
 <a href={`/articulo/${slug}`}>
   <article
-    class="rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-base"
+    class="bg-bg-base rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-dark"
   >
     <div class="relative block pt-[56.25%]">
       <img
@@ -21,18 +21,7 @@ const { title, banner, slug } = Astro.props;
     </div>
 
     <div class="p-4">
-      <h2 class="text-xl font-bold mb-4">{title}</h2>
-
-      <footer>
-        <div class="flex gap-2 items-center">
-          <img
-            alt="Creador del articulo"
-            src="https://avatars.githubusercontent.com/u/120739623?v=4"
-            class="rounded-full w-8"
-          />
-          <h5>Andres Parra</h5>
-        </div>
-      </footer>
+      <h2 class="text-xl font-bold">{title}</h2>
     </div>
   </article>
 </a>
