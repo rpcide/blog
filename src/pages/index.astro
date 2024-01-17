@@ -1,13 +1,13 @@
 ---
+import Post from "../components/Post.astro";
 import Layout from "../layouts/Layout.astro";
 import Newsletter from "../components/Newsletter.astro";
 
 import { getAllPosts } from "../lib/Posts";
 import ListRecentPosts from "../components/ListRecentPosts.astro";
+import Pagination from "../components/Pagination.astro";
 
-const { posts, count, hasNext } = await getAllPosts({ page: 1 });
-
-console.log(count);
+const { posts, hasNext, page } = await getAllPosts({ page: 1 });
 
 if (!posts) {
   return new Response(null, {
@@ -18,9 +18,65 @@ if (!posts) {
 ---
 
 <Layout title="Blog">
-  <ListRecentPosts posts={posts} hasNext={hasNext} />
+  <ListRecentPosts posts={posts} />
+
+  {hasNext && <Pagination />}
 
   <Newsletter />
 </Layout>
 
-<style></style>
+<script define:vars={{ page }}>
+  const $btnLoadMorePosts = document.getElementById("btn-loadMorePosts");
+  const $posts = document.getElementById("posts");
+  const $pagination = document.getElementById("pagination");
+
+  let currentPage = page;
+
+  if ($btnLoadMorePosts) {
+    $btnLoadMorePosts.addEventListener("click", () => {
+      fetch(`/api/posts?page=${++currentPage}`)
+        .then((res) => res.json())
+        .then((data) => {
+          data.posts.map((post) => {
+            const el = document.createElement("a");
+            el.href = `/articulo/${post.slug}`;
+            el.className = "animate-fadeIn";
+            el.innerHTML = `
+              <article
+                class="bg-bg-base rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-dark"
+              >
+                <div class="relative block pt-[56.25%]">
+                  <img
+                    src=${post.banner}
+                    alt=${post.title}
+                    class="absolute top-0 left-0 w-full h-full"
+                  />
+                </div>
+
+                <div class="p-4">
+                  <h2 class="text-xl font-bold mb-4">${post.title}</h2>
+
+                  <footer class="flex gap-2">
+                    ${post.tags
+                      .map((tag) => {
+                        return `<span class="bg-bg-alt rounded px-2 py-1 text-xs">${tag}</span>`;
+                      })
+                      .join(" ")}
+                  </footer>
+                </div>
+              </article>
+            `;
+
+            $posts.appendChild(el);
+          });
+
+          if (!data.hasNext) {
+            $pagination.classList.add("animate-fadeOut");
+            setTimeout(() => {
+              $pagination.remove();
+            }, 200);
+          }
+        });
+    });
+  }
+</script>

@@ -9,7 +9,7 @@ interface Props {
 const { title, banner, slug, tags } = Astro.props;
 ---
 
-<a href={`/articulo/${slug}`}>
+<a href={`/articulo/${slug}`} class="animate-fadeIn">
   <article
     class="bg-bg-base rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-dark"
   >

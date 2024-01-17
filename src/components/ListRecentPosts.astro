@@ -1,25 +1,21 @@
 ---
-import Pagination from "./Pagination.astro";
 import Post from "./Post.astro";
 
 interface Props {
   posts: Array<any>;
-  hasNext: boolean;
 }
 
-const { posts, hasNext } = Astro.props;
+const { posts } = Astro.props;
 ---
 
 <section class="my-10">
   <h2 class="text-3xl font-bold mb-4">Artículos recientes</h2>
 
-  <div class="grid grid-cols-responsive gap-4">
+  <div class="grid grid-cols-responsive gap-4" id="posts">
     {
       posts.map((post) => {
         return <Post {...post} />;
       })
     }
   </div>
-
-  {hasNext && <Pagination />}
 </section>
