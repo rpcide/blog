@@ -1,30 +1,36 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Newsletter from "../components/Newsletter.astro";
+import Layout from "../../layouts/Layout.astro";
+import ListRecentPosts from "../../components/ListRecentPosts.astro";
 
-import { getAllPosts } from "../lib/Posts";
-import ListRecentPosts from "../components/ListRecentPosts.astro";
-import Pagination from "../components/Pagination.astro";
+import { getPostsByTag } from "../../lib/Posts";
+import Pagination from "../../components/Pagination.astro";
 
-const { posts, hasNext, page } = await getAllPosts({ page: 1 });
+const isTag = Astro.url.searchParams.get("tag");
+const isSearch = Astro.url.searchParams.get("s");
 
-if (!posts) {
-  return new Response(null, {
-    status: 404,
-    statusText: "Not found",
-  });
-}
+const search = isTag || isSearch || "";
+const tags = isTag ? search : [];
+
+const { posts, hasNext, page } = await getPostsByTag({ tags, search, page: 1 });
 ---
 
-<Layout title="Blog">
-  <ListRecentPosts posts={posts} />
+<Layout title={`Resultados de ${search}`}>
+  {
+    posts.length === 0 ? (
+      <div>
+        <p>Por el momento no hay contenido que mostrar</p>
+      </div>
+    ) : (
+      <div>
+        <ListRecentPosts posts={posts} />
 
-  {hasNext && <Pagination />}
-
-  <Newsletter />
+        {hasNext && <Pagination />}
+      </div>
+    )
+  }
 </Layout>
 
-<script define:vars={{ page }}>
+<script define:vars={{ page, search, tags, isTag }}>
   const $btnLoadMorePosts = document.getElementById("btn-loadMorePosts");
   const $posts = document.getElementById("posts");
   const $pagination = document.getElementById("pagination");
@@ -33,7 +39,11 @@ if (!posts) {
 
   if ($btnLoadMorePosts) {
     $btnLoadMorePosts.addEventListener("click", () => {
-      fetch(`/api/posts?page=${++currentPage}`)
+      fetch(
+        `/api/searchPosts?${
+          isTag ? `tags=${tags}` : `s=${search}`
+        }&page=${++currentPage}`
+      )
         .then((res) => res.json())
         .then((data) => {
           data.posts.map((post) => {

@@ -1,3 +1,7 @@
+---
+import Button from "./Button.astro";
+---
+
 <div class="border-t-0 border-b-[1px] border-border py-6">
   <div
     class="px-6 w-full max-w-screen-xl mx-auto flex justify-between items-center"
@@ -5,19 +9,121 @@
     <div>
       <ul class="flex gap-6">
         <li>
-          <a href="/">C++</a>
+          <a href="/busqueda?tag=basics">Fundamentos</a>
         </li>
 
         <li>
-          <a href="/">Dynamic Programming</a>
+          <a href="/busqueda?tag=cpp">C++</a>
         </li>
 
         <li>
-          <a href="/">DFS</a>
+          <a href="/busqueda?tag=dp">DP</a>
+        </li>
+
+        <li>
+          <a href="/busqueda?tag=python">Python</a>
+        </li>
+
+        <li>
+          <a href="/busqueda?tag=data-structures">Estructura de datos</a>
+        </li>
+
+        <li>
+          <a href="/busqueda?s=graphs">Grafos</a>
         </li>
       </ul>
     </div>
 
-    <div>Search</div>
+    <div
+      id="modal-search"
+      class="hidden animate-fadeIn fixed top-0 left-0 z-10 w-full h-full max-w-screen max-h-screen bg-[rgba(0,0,0,.6)] place-items-center"
+    >
+      <div
+        class="w-[90%] absolute top-2/4 left-2/4 translate-x-[-50%] translate-y-[-50%] max-w-md"
+      >
+        <form id="form-search">
+          <div class="flex flex-col items-center gap-4">
+            <input
+              type="text"
+              autofocus
+              name="input-search"
+              class="px-4 py-2 bg-bg-alt shadow-md rounded w-full"
+              placeholder="Buscar ..."
+            />
+            <Button colorScheme="primary">Buscar</Button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <Button id="btn-search">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          ></path>
+        </svg>
+      </Button>
+    </div>
   </div>
 </div>
+
+<script>
+  (() => {
+    const $btnSearch = document.getElementById("btn-search");
+    const $modalSearch = document.getElementById("modal-search");
+    const $formSearch = document.getElementById("form-search");
+
+    if (!$btnSearch) return;
+
+    // Show modal on click in search button
+    $btnSearch.addEventListener("click", () => {
+      if (!$modalSearch.className.includes("hidden")) {
+        $modalSearch.classList.add("animate-fadeOut");
+
+        setTimeout(() => {
+          $modalSearch.classList.add("hidden");
+          $modalSearch.classList.remove("animate-fadeOut");
+        }, 500);
+      } else {
+        $modalSearch.classList.remove("hidden");
+      }
+    });
+
+    // Close modal on click out the input
+    $modalSearch.addEventListener("click", (e: any) => {
+      e.stopPropagation();
+
+      if (e.target.tagName === "INPUT") return;
+
+      $modalSearch.classList.add("animate-fadeOut");
+
+      setTimeout(() => {
+        $modalSearch.classList.add("hidden");
+        $modalSearch.classList.remove("animate-fadeOut");
+      }, 500);
+    });
+
+    // Submit form
+    $formSearch.addEventListener("submit", (e: any) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      // redirect to search
+      const value = formData.get("input-search");
+      window.location.href = `/busqueda?s=${value}`;
+
+      // Clear input
+      e.target.querySelector("input").value = "";
+    });
+  })();
+</script>

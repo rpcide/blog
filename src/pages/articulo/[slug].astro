@@ -41,7 +41,10 @@ const content = marked.parse(data.content);
             class="rounded-full w-8 border-2 border-primary-400"
           />
           <h5>
-            <a href={`/users/${user.username}`} target="_blank">
+            <a
+              href={`https://www.rpcide.cloud/profile/${user.username}`}
+              target="_blank"
+            >
               {user.name}
             </a>
           </h5>
