@@ -54,7 +54,7 @@ export const getPostsByTag = async (
     };
   }
 
-  const countPosts = await count(filters);
+  const countPosts = await (await Posts()).count(filters);
 
   const posts = await (
     await Posts()

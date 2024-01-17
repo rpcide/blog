@@ -36,7 +36,6 @@ const { posts, hasNext, page } = await getPostsByTag({ tags, search, page: 1 });
   const $pagination = document.getElementById("pagination");
 
   let currentPage = page;
-  g;
 
   if ($btnLoadMorePosts) {
     $btnLoadMorePosts.addEventListener("click", () => {
