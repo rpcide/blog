@@ -5,7 +5,9 @@ import Newsletter from "../components/Newsletter.astro";
 import { getAllPosts } from "../lib/Posts";
 import ListRecentPosts from "../components/ListRecentPosts.astro";
 
-const { page, posts } = await getAllPosts({ page: 1 });
+const { posts, count, hasNext } = await getAllPosts({ page: 1 });
+
+console.log(count);
 
 if (!posts) {
   return new Response(null, {
@@ -16,7 +18,7 @@ if (!posts) {
 ---
 
 <Layout title="Blog">
-  <ListRecentPosts posts={posts} />
+  <ListRecentPosts posts={posts} hasNext={hasNext} />
 
   <Newsletter />
 </Layout>

@@ -3,9 +3,10 @@ interface Props {
   title: string;
   banner: string;
   slug: string;
+  tags: string[];
 }
 
-const { title, banner, slug } = Astro.props;
+const { title, banner, slug, tags } = Astro.props;
 ---
 
 <a href={`/articulo/${slug}`}>
@@ -21,7 +22,17 @@ const { title, banner, slug } = Astro.props;
     </div>
 
     <div class="p-4">
-      <h2 class="text-xl font-bold">{title}</h2>
+      <h2 class="text-xl font-bold mb-4">{title}</h2>
+
+      <footer class="flex gap-2">
+        {
+          tags.map((tag) => {
+            return (
+              <span class="bg-bg-alt rounded px-2 py-1 text-xs">{tag}</span>
+            );
+          })
+        }
+      </footer>
     </div>
   </article>
 </a>

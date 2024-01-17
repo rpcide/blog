@@ -10,6 +10,8 @@ export const count = async () => {
 };
 
 export const getAllPosts = async ({ page } = { page: 1 }) => {
+  const countPosts = await count();
+
   const posts = await (
     await Posts()
   )
@@ -18,7 +20,12 @@ export const getAllPosts = async ({ page } = { page: 1 }) => {
     .limit(PAGE_LIMIT)
     .toArray();
 
-  return { page, posts };
+  return {
+    page,
+    posts,
+    count: countPosts,
+    hasNext: page * PAGE_LIMIT < countPosts,
+  };
 };
 
 export const getPostBySlug = async (slug) => {
