@@ -1,5 +1,5 @@
 import { API_USERS_URL } from "../../config";
-import { getAllPosts, createPost } from "../../lib/Posts";
+import { getAllPosts, createPost, updatePost } from "../../lib/Posts";
 import { verifyToken } from "../../lib/user";
 
 export const GET = async ({ request }) => {
@@ -34,6 +34,33 @@ export const POST = async ({ request }) => {
   }
 
   const response = await createPost(data.data);
+
+  if (!response) {
+    return new Response(null, {
+      status: 404,
+      statusText: "Not found",
+    });
+  }
+
+  return new Response(JSON.stringify(response), {
+    status: 201,
+  });
+};
+
+export const PUT = async ({ request }) => {
+  const data = await request.json();
+
+  // check user
+  const isValidUser = await verifyToken(data.token);
+
+  if (isValidUser.error) {
+    return new Response(null, {
+      status: 401,
+      statusText: "Unauthorized",
+    });
+  }
+
+  const response = await updatePost(data.data);
 
   if (!response) {
     return new Response(null, {

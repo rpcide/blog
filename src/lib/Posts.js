@@ -2,13 +2,16 @@ import uniqid from "uniqid";
 
 import { PAGE_LIMIT } from "../config";
 import { Posts } from "./mongodb";
+import { ObjectId } from "mongodb";
+
+const collection = await Posts();
 
 /**
  * Get the count posts
  * @returns Count all posts elements
  */
 export const count = async () => {
-  return (await Posts()).count();
+  return collection.count();
 };
 
 /**
@@ -24,9 +27,7 @@ export const count = async () => {
 export const getAllPosts = async ({ page } = { page: 1 }) => {
   const countPosts = await count();
 
-  const posts = await (
-    await Posts()
-  )
+  const posts = await collection
     .find({})
     .skip(PAGE_LIMIT * (page - 1))
     .limit(PAGE_LIMIT)
@@ -43,7 +44,7 @@ export const getAllPosts = async ({ page } = { page: 1 }) => {
 };
 
 export const getPostsBySlug = async ({ slug }) => {
-  return await (await Posts()).findOne({ slug });
+  return await collection.findOne({ slug });
 };
 
 export const getPostsByTag = async (
@@ -62,11 +63,9 @@ export const getPostsByTag = async (
     };
   }
 
-  const countPosts = await (await Posts()).count(filters);
+  const countPosts = await collection.count(filters);
 
-  const posts = await (
-    await Posts()
-  )
+  const posts = await collection
     .find(filters)
     .skip(PAGE_LIMIT * (page - 1))
     .limit(PAGE_LIMIT)
@@ -81,28 +80,27 @@ export const getPostsByTag = async (
 };
 
 export const getPostBySlug = async (slug) => {
-  return await (
-    await Posts()
-  ).findOne({
+  return await collection.findOne({
     slug: slug,
   });
 };
 
+/**
+ * Create post article
+ * @param {*} post
+ * @returns Post
+ */
 export const createPost = async (post) => {
   // create unique slug
   let slug = post.title.toLowerCase().replaceAll(" ", "-");
 
   const existPosts = await getPostsBySlug({ slug });
 
-  if (existPosts) {
-    slug += "-" + uniqid();
-  }
+  if (existPosts) slug += "-" + uniqid();
 
-  const response = await (await Posts()).insertOne({ ...post, slug });
+  const response = await collection.insertOne({ ...post, slug });
 
-  if (!response) {
-    return null;
-  }
+  if (!response) return null;
 
   return {
     ...post,
@@ -110,5 +108,26 @@ export const createPost = async (post) => {
     id: response.insertedId,
     createdAt: new Date(),
     updatedAt: new Date(),
+  };
+};
+
+/**
+ * Update post article
+ * @param {*} post
+ * @returns Post
+ */
+export const updatePost = async (post) => {
+  // Search by post id and author uid
+  const response = await collection.updateOne(
+    { _id: new ObjectId(post.id), authorId: post.authorId },
+    {
+      $set: { ...post, updatedAt: new Date() },
+    }
+  );
+
+  if (response.modifiedCount === 0) return null;
+
+  return {
+    ...post,
   };
 };
