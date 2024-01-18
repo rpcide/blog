@@ -34,7 +34,9 @@ export const getAllPosts = async ({ page } = { page: 1 }) => {
 
   return {
     page,
-    posts,
+    posts: posts.map((el) => {
+      return { ...el, id: el._id };
+    }),
     count: countPosts,
     hasNext: page * PAGE_LIMIT < countPosts,
   };
