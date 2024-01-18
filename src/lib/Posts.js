@@ -1,3 +1,5 @@
+import uniqid from "uniqid";
+
 import { PAGE_LIMIT } from "../config";
 import { Posts } from "./mongodb";
 
@@ -36,6 +38,10 @@ export const getAllPosts = async ({ page } = { page: 1 }) => {
     count: countPosts,
     hasNext: page * PAGE_LIMIT < countPosts,
   };
+};
+
+export const getPostsBySlug = async ({ slug }) => {
+  return await (await Posts()).findOne({ slug });
 };
 
 export const getPostsByTag = async (
@@ -78,4 +84,29 @@ export const getPostBySlug = async (slug) => {
   ).findOne({
     slug: slug,
   });
+};
+
+export const createPost = async (post) => {
+  // create unique slug
+  let slug = post.title.toLowerCase().replaceAll(" ", "-");
+
+  const existPosts = await getPostsBySlug({ slug });
+
+  if (existPosts) {
+    slug += "-" + uniqid();
+  }
+
+  const response = await (await Posts()).insertOne({ ...post, slug });
+
+  if (!response) {
+    return null;
+  }
+
+  return {
+    ...post,
+    slug,
+    id: response.insertedId,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 };
