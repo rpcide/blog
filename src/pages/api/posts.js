@@ -1,5 +1,6 @@
 import { API_USERS_URL } from "../../config";
 import { getAllPosts, createPost } from "../../lib/Posts";
+import { verifyToken } from "../../lib/user";
 
 export const GET = async ({ request }) => {
   const url = new URL(request.url);
@@ -23,17 +24,16 @@ export const POST = async ({ request }) => {
   const data = await request.json();
 
   // check user
-  const userResponse = await fetch(`${API_USERS_URL}/user/${data.authorId}`);
-  const { data: user } = await userResponse.json();
+  const isValidUser = await verifyToken(data.token);
 
-  if (!user) {
+  if (isValidUser.error) {
     return new Response(null, {
       status: 401,
       statusText: "Unauthorized",
     });
   }
 
-  const response = await createPost(data);
+  const response = await createPost(data.data);
 
   if (!response) {
     return new Response(null, {
