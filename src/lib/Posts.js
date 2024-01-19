@@ -131,3 +131,20 @@ export const updatePost = async (post) => {
     ...post,
   };
 };
+
+/**
+ * Remove post article
+ * @param {*} id: string, authorId: string
+ * @returns boolean
+ */
+export const removePost = async (id, authorId) => {
+  // Search by post id and author uid
+  const response = await collection.deleteMany({
+    _id: new ObjectId(id),
+    authorId: authorId,
+  });
+
+  if (response.deletedCount === 0) return false;
+
+  return true;
+};

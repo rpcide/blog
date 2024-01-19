@@ -1,5 +1,10 @@
 import { API_USERS_URL } from "../../config";
-import { getAllPosts, createPost, updatePost } from "../../lib/Posts";
+import {
+  getAllPosts,
+  createPost,
+  updatePost,
+  removePost,
+} from "../../lib/Posts";
 import { verifyToken } from "../../lib/user";
 
 export const GET = async ({ request }) => {
@@ -61,6 +66,45 @@ export const PUT = async ({ request }) => {
   }
 
   const response = await updatePost(data.data);
+
+  if (!response) {
+    return new Response(null, {
+      status: 404,
+      statusText: "Not found",
+    });
+  }
+
+  return new Response(JSON.stringify(response), {
+    status: 201,
+  });
+};
+
+export const DELETE = async ({ request }) => {
+  const data = await request.json();
+
+  if (!data.id || !data.authorId) {
+    return new Response(
+      JSON.stringify({
+        msg: "Fields id and authorId is required",
+      }),
+      {
+        status: 404,
+        statusText: "Fields id and authorId is required",
+      }
+    );
+  }
+
+  // check user
+  const isValidUser = await verifyToken(data.token);
+
+  if (isValidUser.error) {
+    return new Response(null, {
+      status: 401,
+      statusText: "Unauthorized",
+    });
+  }
+
+  const response = await removePost(data.id, data.authorId);
 
   if (!response) {
     return new Response(null, {
