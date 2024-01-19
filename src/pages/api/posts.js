@@ -1,9 +1,8 @@
-import { API_USERS_URL } from "../../config";
 import {
-  getAllPosts,
   createPost,
-  updatePost,
+  getAllPosts,
   removePost,
+  updatePost,
 } from "../../lib/Posts";
 import { verifyToken } from "../../lib/user";
 

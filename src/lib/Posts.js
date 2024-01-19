@@ -47,6 +47,39 @@ export const getPostsBySlug = async ({ slug }) => {
   return await collection.findOne({ slug });
 };
 
+/**
+ * Get all posts by author user
+ * @params {*} page: number, authorId: string
+ * @returns {
+ *  page: number,
+ *  posts: Post[],
+ *  count: number.
+ *  hasNext: boolean
+ * }
+ */
+export const getAllPostsByUser = async ({ page, authorId } = { page: 1 }) => {
+  if (!authorId) return null;
+
+  const countPosts = await collection.count({ authorId: authorId });
+
+  const posts = await collection
+    .find({
+      authorId: authorId,
+    })
+    .skip(PAGE_LIMIT * (page - 1))
+    .limit(PAGE_LIMIT)
+    .toArray();
+
+  return {
+    page,
+    posts: posts.map((el) => {
+      return { ...el, id: el._id };
+    }),
+    count: countPosts,
+    hasNext: page * PAGE_LIMIT < countPosts,
+  };
+};
+
 export const getPostsByTag = async (
   { tags, search, page } = { search: "", page: 1 }
 ) => {
