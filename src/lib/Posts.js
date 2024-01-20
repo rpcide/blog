@@ -111,7 +111,9 @@ export const getPostsByTag = async (
 
   return {
     page,
-    posts,
+    posts: posts.map(post => {
+      return { ...post, id: post._id }
+    }),
     count: countPosts,
     hasNext: page * PAGE_LIMIT < countPosts,
   };
