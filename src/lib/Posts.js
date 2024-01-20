@@ -47,6 +47,11 @@ export const getPostsBySlug = async ({ slug }) => {
   return await collection.findOne({ slug });
 };
 
+export const getPostById = async ({ id }) => {
+  return await collection.findOne({ _id: new ObjectId(id) });
+};
+
+
 /**
  * Get all posts by author user
  * @params {*} page: number, authorId: string
