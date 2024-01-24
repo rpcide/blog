@@ -11,7 +11,7 @@ const { title, banner, slug, tags } = Astro.props;
 
 <a href={`/articulo/${slug}`} class="animate-fadeIn">
   <article
-    class="bg-bg-base rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-dark"
+    class="bg-bg-base rounded-lg border-2 border-border overflow-hidden cursor-pointer transition-all hover:bg-bg-dark h-full max-h-96"
   >
     <div class="relative block pt-[56.25%]">
       <img
@@ -28,7 +28,7 @@ const { title, banner, slug, tags } = Astro.props;
         {
           tags.map((tag) => {
             return (
-              <span class="bg-bg-alt rounded px-2 py-1 text-xs">{tag}</span>
+              <span class="bg-primary-50 rounded px-2 py-1 text-xs">{tag}</span>
             );
           })
         }
