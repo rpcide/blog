@@ -29,6 +29,7 @@ export const getAllPosts = async ({ page } = { page: 1 }) => {
 
   const posts = await collection
     .find({})
+    .sort({ createdAt: -1 })
     .skip(PAGE_LIMIT * (page - 1))
     .limit(PAGE_LIMIT)
     .toArray();
@@ -71,6 +72,7 @@ export const getAllPostsByUser = async ({ page, authorId } = { page: 1 }) => {
     .find({
       authorId: authorId,
     })
+    .sort({ createdAt: -1 })
     .skip(PAGE_LIMIT * (page - 1))
     .limit(PAGE_LIMIT)
     .toArray();
