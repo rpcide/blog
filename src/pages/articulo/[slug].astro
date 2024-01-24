@@ -7,6 +7,7 @@ import { API_USERS_URL, APP_RPCIDE_URL } from "../../config";
 import { getPostBySlug } from "../../lib/Posts";
 
 import Layout from "../../layouts/Layout.astro";
+import SharePost from "../../components/SharePost.astro";
 
 dayjs.locale("es");
 
@@ -59,6 +60,13 @@ const content = marked.parse(data.content);
     <div class="mt-10 markdown">
       <article set:html={content} />
     </div>
+
+    <SharePost
+      facebook={`https://www.facebook.com/sharer/sharer.php?u=https://blog.rpcide.cloud/articulo/${data.slug}`}
+      twitter={`https://twitter.com/intent/tweet?url=https://blog.rpcide.cloud/articulo/${data.slug}&text=${data.title} - @rpcide`}
+      linkedin={`https://www.linkedin.com/feed/?shareActive=true&text=${data.title} https://blog.rpcide.cloud/articulo/${data.slug} @rpcide`}
+      whatsapp={`https://api.whatsapp.com/send?text=${data.title} https://blog.rpcide.cloud/articulo/${data.slug} @rpcide`}
+    />
   </section>
 </Layout>
 
