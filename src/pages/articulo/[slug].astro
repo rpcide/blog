@@ -2,7 +2,7 @@
 import { marked } from "marked";
 import dayjs from "dayjs";
 
-import { API_USERS_URL } from "../../config";
+import { API_USERS_URL, APP_RPCIDE_URL } from "../../config";
 import { getPostBySlug } from "../../lib/Posts";
 
 import Layout from "../../layouts/Layout.astro";
@@ -36,13 +36,16 @@ const content = marked.parse(data.content);
       user && (
         <div class="flex gap-2 items-center">
           <img
-            src={`${user.photo}`}
+            src={`${
+              user.photo ||
+              "https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
+            }`}
             alt={`Fotografía de ${user.name} - @${user.username}`}
             class="rounded-full w-8 border-2 border-primary-400"
           />
           <h5>
             <a
-              href={`https://www.rpcide.cloud/profile/${user.username}`}
+              href={`${APP_RPCIDE_URL}/profile/${user.username}`}
               target="_blank"
             >
               {user.name}
