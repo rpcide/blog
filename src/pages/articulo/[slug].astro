@@ -1,6 +1,7 @@
 ---
 import { marked } from "marked";
 import dayjs from "dayjs";
+import "dayjs/locale/es";
 
 import { API_USERS_URL, APP_RPCIDE_URL } from "../../config";
 import { getPostBySlug } from "../../lib/Posts";
@@ -26,7 +27,7 @@ const content = marked.parse(data.content);
 
 <Layout title={`${data.title} - RPCIDE Blog`}>
   <section class="article-content">
-    <p class="text-textAlt mb-4">
+    <p class="text-textAlt mb-4 first-letter:uppercase">
       <time>{dayjs(data.createdAt).format("MMMM D, YYYY")}</time>
     </p>
 
