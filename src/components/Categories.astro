@@ -4,10 +4,10 @@ import Button from "./Button.astro";
 
 <div class="border-t-0 border-b-[1px] border-border py-6">
   <div
-    class="px-6 w-full max-w-screen-xl mx-auto flex justify-between items-center"
+    class="px-6 w-full max-w-screen-xl mx-auto flex justify-between md:items-center flex-col md:flex-row gap-4 md:gap-0"
   >
     <div>
-      <ul class="flex gap-6">
+      <ul class="flex gap-6 flex-col md:flex-row">
         <li>
           <a href="/busqueda?tag=basics">Fundamentos</a>
         </li>
@@ -57,7 +57,7 @@ import Button from "./Button.astro";
     </div>
 
     <div>
-      <Button id="btn-search">
+      <Button id="btn-search" className="max-md:w-full max-md:flex max-md:justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
