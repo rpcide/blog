@@ -100,6 +100,8 @@ Por eso los mensajes de commit deben seguir [Conventional Commits](https://www.c
 - `feat!: ...` o pie `BREAKING CHANGE:` → versión major (1.0.0 → 2.0.0)
 - `docs:`, `chore:`, `refactor:`, `style:`, `ci:`, `build:`, `test:` → no generan release por sí solos
 
+El workflow `.github/workflows/conventional-commits.yml` valida en cada PR que el **título del PR** y **todos sus commits** (excepto los de merge) sigan el formato `tipo(scope opcional): descripción`, con `tipo` en: `feat`, `fix`, `perf`, `revert`, `refactor`, `docs`, `style`, `chore`, `test`, `build`, `ci` (los mismos de `release-please-config.json`). Si falla, corrige el título o reescribe los commits.
+
 No edites a mano la versión de `package.json`, `.release-please-manifest.json` ni `CHANGELOG.md`.
 
 ## Notas para agentes

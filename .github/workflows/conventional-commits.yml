@@ -1,0 +1,66 @@
+name: Conventional Commits
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: conventional-commits-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  # Keep in sync with the types in release-please-config.json
+  TYPES: feat|fix|perf|revert|refactor|docs|style|chore|test|build|ci
+
+jobs:
+  pr-title:
+    name: Título del PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern="^(${TYPES})(\([a-z0-9._/-]+\))?!?: [^ ].*$"
+          if [[ "$TITLE" =~ $pattern ]]; then
+            echo "✅ $TITLE"
+          else
+            echo "::error title=Título del PR inválido::\"$TITLE\" no sigue Conventional Commits. Usa 'tipo(scope opcional): descripción', con tipo en: ${TYPES//|/, }."
+            exit 1
+          fi
+
+  commits:
+    name: Mensajes de commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Check commit messages
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          pattern="^(${TYPES})(\([a-z0-9._/-]+\))?!?: [^ ].*$"
+          failed=0
+          while IFS= read -r line; do
+            sha="${line%% *}"
+            subject="${line#* }"
+            if [[ "$subject" =~ $pattern ]]; then
+              echo "✅ ${sha:0:7} $subject"
+            else
+              echo "::error title=Commit inválido ${sha:0:7}::\"$subject\" no sigue Conventional Commits."
+              failed=1
+            fi
+          done < <(git log --no-merges --format='%H %s' "$BASE..$HEAD")
+          if [[ $failed -ne 0 ]]; then
+            echo "Formato esperado: 'tipo(scope opcional): descripción', con tipo en: ${TYPES//|/, }."
+            echo "Corrige los mensajes con 'git rebase -i' y 'reword', o usa squash merge con un título de PR válido."
+            exit 1
+          fi
