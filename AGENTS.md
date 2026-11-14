@@ -80,6 +80,22 @@ Campos usados: `_id`, `title`, `slug`, `content` (Markdown), `tags` (array), `au
 - Fechas con `dayjs` y locale `es`.
 - Versiones de dependencias fijadas en `package.json`: no las actualices salvo que se pida.
 
+## Versionado y releases
+
+Las versiones se generan automáticamente con [release-please](https://github.com/googleapis/release-please) (`.github/workflows/release.yml`):
+
+1. Cada push a `main` analiza los commits nuevos y abre/actualiza un PR `chore: release X.Y.Z` que sube la versión en `package.json`/`package-lock.json` y actualiza `CHANGELOG.md`.
+2. Al hacer merge de ese PR se crea el tag `vX.Y.Z` y la release en GitHub.
+
+Por eso los mensajes de commit deben seguir [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `fix: ...` → versión patch (1.0.0 → 1.0.1)
+- `feat: ...` → versión minor (1.0.0 → 1.1.0)
+- `feat!: ...` o pie `BREAKING CHANGE:` → versión major (1.0.0 → 2.0.0)
+- `docs:`, `chore:`, `refactor:`, `style:`, `ci:`, `build:`, `test:` → no generan release por sí solos
+
+No edites a mano la versión de `package.json`, `.release-please-manifest.json` ni `CHANGELOG.md`.
+
 ## Notas para agentes
 
 - Haz cambios pequeños y enfocados; no reestructures carpetas sin necesidad.
