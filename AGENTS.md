@@ -14,9 +14,15 @@ npm run dev        # servidor de desarrollo en http://localhost:4321
 npm run build      # build de producción (salida para Vercel)
 npm run preview    # previsualizar el build
 npm run astro -- check   # chequeo de tipos/diagnósticos de Astro
+npm test           # tests unitarios (Vitest)
+npm run test:watch # tests en modo watch
 ```
 
-No hay suite de tests ni linter configurados. Para validar cambios, ejecuta `npm run build`.
+## Tests y CI
+
+- Tests unitarios con **Vitest** en `tests/` (`tests/lib` para `src/lib`, `tests/api` para los endpoints). No necesitan base de datos ni variables de entorno: MongoDB se sustituye con `vi.mock` y la colección falsa de `tests/helpers/collection.js`, y `fetch` con `vi.stubGlobal`.
+- GitHub Actions (`.github/workflows/ci.yml`) ejecuta `npm test` y `npm run build` en cada push a `main` y en cada pull request.
+- No hay linter configurado. Para validar cambios, ejecuta `npm test` y `npm run build`.
 
 ## Variables de entorno
 
